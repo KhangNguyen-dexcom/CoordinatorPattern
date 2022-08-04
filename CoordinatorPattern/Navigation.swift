@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Navigation<Screen> {
+public enum Navigation<Screen> {
     case push(Screen)
     
     case sheet(Screen, onDismiss: (() -> Void)? = nil)
@@ -19,7 +19,7 @@ enum Navigation<Screen> {
     }
     
     
-    var screen: Screen {
+    public var screen: Screen {
         get {
             switch self {
             case .push(let screen), .sheet(let screen, _), .cover(let screen, _):
@@ -38,4 +38,40 @@ enum Navigation<Screen> {
             }
         }
     }
+    
+    public var needNavigationView: Bool {
+        switch self {
+        case .sheet, .cover:
+            print("NEED NAVVIEW")
+            return true
+        case .push:
+            print("NO NEED NAVVIEW")
+            return false
+        }
+    }
+    
+    public var isSheet: Bool {
+        switch self {
+        case .sheet:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
+public typealias NavigationStack<Screen> = [Navigation<Screen>]
+
+
+public protocol NavigationProtocol {
+    associatedtype Screen
+    
+    static func push(_ screen: Screen) -> Self
+    static func sheet(_ screen: Screen, onDismiss: (() -> Void)?) -> Self
+    static func cover(_ screen: Screen, onDismiss: (() -> Void)?) -> Self
+    var screen: Screen { get set }
+    var needNavigationView: Bool { get }
+}
+
+extension Navigation: NavigationProtocol {
 }
