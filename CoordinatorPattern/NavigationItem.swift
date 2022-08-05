@@ -42,10 +42,9 @@ indirect enum NavigationItem<Screen, ScreenView: View>: View {
     
     private var isActive: Binding<Bool> {
         switch self {
-        case .navigation(let navigation, next: .navigation, let navigationStack, let index, _):
+        case .navigation(_, next: .navigation, let navigationStack, let index, _):
             return Binding(
                 get: {
-//                    print("navigation\(String(describing: navigation)), value: \(navigationStack.wrappedValue.count > index + 1)")
                     return navigationStack.wrappedValue.count > index + 1
                 },
                 set: { isPresented in
@@ -102,7 +101,7 @@ indirect enum NavigationItem<Screen, ScreenView: View>: View {
     }
     
     @ViewBuilder
-    var unwrappedView: some View {
+    private var unwrappedView: some View {
         /// On iOS 14.4 and below, you cannot have both .sheet() and .fullScreenCover() together. So we create a workaround by using
         /// a condition that toggles between either adding a sheet modifer or a fullScreenCover modifier.
         if #available(iOS 14.5, *) {

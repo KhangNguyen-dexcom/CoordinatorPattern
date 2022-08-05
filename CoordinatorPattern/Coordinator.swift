@@ -9,16 +9,25 @@ import Foundation
 import SwiftUI
 
 
+/// The coordinator struct uses a navigation stack to display a view
 struct Coordinator<Screen, ScreenView: View>: View {
     @Binding var navigationStack: [Navigation<Screen>]
     
     @ViewBuilder var buildScreenView: (Screen, Int) -> ScreenView
     
+    /// Create a Coordinator using a Binding to a navigation stack (an array of Screen)
+    /// - Parameters:
+    ///   - navigationStack: A binding to an array of Screen
+    ///   - buildScreenView: A closure that builds a ScreenView from a Screen and its index
     init(_ navigationStack: Binding<[Navigation<Screen>]>, @ViewBuilder buildScreenView: @escaping (Screen, Int) -> ScreenView) {
         self._navigationStack = navigationStack
         self.buildScreenView = buildScreenView
     }
     
+    /// Create a Coordinator using a Binding to a navigation stack (an array of Screen). This is useful when the Screen have a value that will be changed.
+    /// - Parameters:
+    ///   - navigationStack: A binding to an array of Screen
+    ///   - buildScreenView: A closure that builds a ScreenView from a Binding to a Screen and its index
     init(_ navigationStack: Binding<[Navigation<Screen>]>, @ViewBuilder buildScreenView: @escaping (Binding<Screen>, Int) -> ScreenView) {
         self._navigationStack = navigationStack
         self.buildScreenView = { _, index in

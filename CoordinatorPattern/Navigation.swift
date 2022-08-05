@@ -39,6 +39,7 @@ public enum Navigation<Screen> {
         }
     }
     
+    /// Check whether the current screen will need to be embedded in a NavigationView.
     public var needNavigationView: Bool {
         switch self {
         case .sheet, .cover:
@@ -50,6 +51,7 @@ public enum Navigation<Screen> {
         }
     }
     
+    /// To use with the workaround for adding the .sheet() and .fullScreenCover() together in iOS 14.4 and below
     public var isSheet: Bool {
         switch self {
         case .sheet:
